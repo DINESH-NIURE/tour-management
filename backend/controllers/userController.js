@@ -56,15 +56,10 @@ export const deleteUser = async (req, res) => {
 };
 
 export const getSingleUser = async (req, res) => {
+   const id = req.params.id;
   try {
-    const id = req.params.id;
-    const User = await User.findById(id);
-    if (!User) {
-      return res
-        .status(404)
-        .json({ success: false, message: "User not found" });
-    }
-    res.status(200).json({
+    const user = await User.findById(id);
+   atus(200).json({
       success: true,
       message: "Successfully retrieved User",
       data: User,
@@ -75,17 +70,13 @@ export const getSingleUser = async (req, res) => {
 };
 
 export const getAllUser = async (req, res) => {
-  const page = parseInt(req.query.page);
-
   try {
-    const Users = await User.find({})
-      .skip(page * 8)
-      .limit(8);
+    const users = await User.find({})
+   
     res.status(200).json({
       success: true,
-      count: Users.length,
       message: "Successfully retrieved all Users",
-      data: Users,
+      data: users,
     });
   } catch (error) {
     res
