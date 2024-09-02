@@ -5,8 +5,7 @@ import { useState } from "react";
 
 const Booking = ({ tour, avgRating }) => {
   const { price, reviews } = tour;
-const navigate = useNavigate();
-
+  const navigate = useNavigate();
 
   const [credintials, setCredintials] = useState({
     userId: "01",
@@ -27,7 +26,7 @@ const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    navigate("/thank-you")
+    navigate("/thank-you");
   };
 
   return (

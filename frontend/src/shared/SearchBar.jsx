@@ -1,20 +1,36 @@
 import "./search-bar.css";
 import { Col, Form, FormGroup } from "reactstrap";
 import { useRef } from "react";
+import { BASE_URL } from "./../utils/config";
+import { useNavigate } from "react-router-dom";
 
 const SearchBar = () => {
   const locationRef = useRef("");
   const distanceRef = useRef(0);
-  const maxPeopleRef = useRef(0);
+  const maxGroupSizeRef = useRef(0);
+  const navigate = useNavigate();
 
-  const searchHandler = () => {
+  const searchHandler = async () => {
     const location = locationRef.current.value;
     const distance = distanceRef.current.value;
-    const maxPeople = maxPeopleRef.current.value;
+    const maxGroupSize = maxGroupSizeRef.current.value;
 
-    if (location === "" || distance === "" || maxPeople === "") {
+    if (location === "" || distance === "" || maxGroupSize === "") {
       return alert("Please fill all the fields");
     }
+
+    const result = await fetch(
+      `${BASE_URL}/tours/search/getTourBySearch?city=${location}&distance=${distance}&maxGroupSize=${maxGroupSize}`
+    );
+
+    if (!result.ok) return alert("something went wrong");
+
+    const res = await result.json();
+
+    navigate(
+      `/tours/search?city=${location}&distance=${distance}&maxGroupSize=${maxGroupSize}`,
+      { state: res.data }
+    );
   };
 
   return (
@@ -53,7 +69,7 @@ const SearchBar = () => {
             </span>
             <div>
               <h6>Max People</h6>
-              <input type="number" placeholder="0" ref={maxPeopleRef} />
+              <input type="number" placeholder="0" ref={maxGroupSizeRef} />
             </div>
           </FormGroup>
           <span className="search__icon" type="submit" onClick={searchHandler}>
